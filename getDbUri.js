@@ -2,6 +2,9 @@ require("dotenv").config();
 
 const getDbUri = env => {
   console.log(`NODE_ENV = ${env}`);
+  console.log(
+    `process.env.DEVELOPMENT_DB_DSN = ${process.env.DEVELOPMENT_DB_DSN}`
+  );
   switch (env) {
     case "development":
       return (
