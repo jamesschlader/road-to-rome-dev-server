@@ -1,7 +1,7 @@
 {
-  "name": "road_to_rome_react",
+  "name": "road_to_rome_react_server",
   "version": "0.1.0",
-  "description": "Road to Rome in React",
+  "description": "Road to Rome server",
   "main": "server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
@@ -21,21 +21,16 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
-    "@apollo/react-hooks": "^3.0.1",
     "axios": "^0.18.1",
-    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
     "express": "^4.16.3",
     "express-graphql": "^0.8.0",
-    "fetch": "^1.1.0",
     "graphql": "^14.3.0",
-    "if-env": "^1.0.4",
     "jasmine": "^3.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "request": "^2.88.0"
+    "passport-local": "^1.0.0"
   }
 }
