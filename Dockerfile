@@ -10,4 +10,4 @@ EXPOSE 3001
 
 ENV NAME production
 
-CMD ["npm", "start:prod"]
+CMD ["npm", "start"]
