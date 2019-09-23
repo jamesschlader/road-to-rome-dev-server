@@ -6,7 +6,7 @@ COPY . /app
 
 RUN npm i
 
-EXPOSE 3001:3001
+EXPOSE 3001
 
 ENV NAME development
 
