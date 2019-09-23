@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const getDbUri = env => {
+  console.log(`NODE_ENV = ${env}`);
   switch (env) {
     case "development":
       return (
