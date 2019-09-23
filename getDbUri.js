@@ -5,7 +5,7 @@ const getDbUri = env => {
     case "development":
       return (
         process.env.DEVELOPMENT_DB_DSN ||
-        "mongodb+srv://admin:p9b2p7SzQ%23FgsAc@cluster0-ducdn.mongodb.net/"
+        "mongodb://localhost:27017/road-to-rome-react"
       );
     case "production":
       return (
