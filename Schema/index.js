@@ -57,6 +57,10 @@ const UserType = new GraphQLObjectType({
           const warriors = parent.stableIds.map(
             async id =>
               await Warrior.findById(id).then(warrior => {
+                console.log(
+                  `in activeStable, checking status of warrior: `,
+                  warrior
+                );
                 return warrior.alive ? warrior : null;
               })
           );
