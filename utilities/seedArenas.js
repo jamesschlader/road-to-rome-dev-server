@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
 const db = mongoose.connection;
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
 const { Arena } = require("../Models/Arena");
 const arenaData = require("../StaticData/arenaData");
 const getDbUri = require("../getDbUri");
 
-console.log(`process.env.NODE_ENV = ${process.env.NODE_ENV}`);
 // Connect to the Mongo DB
-const MONGODB_URI = getDbUri(process.env.NODE_ENV || "development");
+const MONGODB_URI = getDbUri(
+  process.env.MONGODB_URI || process.env.NODE_ENV || "development"
+);
 console.log(`trying to get db, MONGODB_URI = ${MONGODB_URI}`);
 
 mongoose.connect(MONGODB_URI, {

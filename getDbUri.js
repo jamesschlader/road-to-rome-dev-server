@@ -18,7 +18,7 @@ const getDbUri = env => {
     case "test":
       return process.env.TEST_DB_DSN || process.env.MLAB_DB_URI;
     default:
-      return "";
+      return process.env.MLAB_DB_URI;
   }
 };
 
