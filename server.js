@@ -27,6 +27,14 @@ if (process.env.NODE_ENV === "production") {
 // Set up connection to GraphQL
 
 app.use(
+  "/",
+  graphqlHTTP({
+    schema: Schema,
+    graphiql: process.env.NODE_ENV === "development"
+  })
+);
+
+app.use(
   "/graphql",
   graphqlHTTP({
     schema: Schema,
