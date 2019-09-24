@@ -30,7 +30,8 @@ app.use(
   "/",
   graphqlHTTP({
     schema: Schema,
-    graphiql: process.env.NODE_ENV === "development"
+    // graphiql: process.env.NODE_ENV === "development"
+    graphiql: true
   })
 );
 
@@ -38,7 +39,8 @@ app.use(
   "/graphql",
   graphqlHTTP({
     schema: Schema,
-    graphiql: process.env.NODE_ENV === "development"
+    // graphiql: process.env.NODE_ENV === "development"
+    graphiql: true
   })
 );
 

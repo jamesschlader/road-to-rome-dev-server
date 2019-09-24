@@ -35,25 +35,9 @@ const UserType = new GraphQLObjectType({
     },
     stable: {
       type: new GraphQLList(WarriorType),
-      resolve(parent, args) {
-        if (parent.stableIds) {
-          console.log(`parent.stableIds = `, parent.stableIds);
-          const warriors = parent.stableIds.map(id => Warrior.findById(id));
-          return warriors;
-        } else return [];
-      }
-    },
-    activeStable: {
-      type: new GraphQLList(WarriorType),
       async resolve(parent, args) {
         if (parent.stableIds) {
-          const warriors = parent.stableIds.map(
-            async id =>
-              await Warrior.findById(id).then(warrior => {
-                return warrior.alive ? warrior : null;
-              })
-          );
-          return warriors;
+          return parent.stableIds.map(async id => await Warrior.findById(id));
         } else return [];
       }
     }
@@ -328,7 +312,6 @@ const RootQuery = new GraphQLObjectType({
     users: {
       type: new GraphQLList(UserType),
       resolve(parent, args, context) {
-        console.log(`getting users, context = `, context.body);
         return User.find({});
       }
     },
@@ -343,6 +326,16 @@ const RootQuery = new GraphQLObjectType({
         const { username, password } = args;
         const user = await User.findOne({ username });
         return (await user.comparePassword(password)) ? user : null;
+      }
+    },
+
+    getUserWarriors: {
+      type: UserType,
+      args: {
+        username: { type: GraphQLString }
+      },
+      async resolve(parent, args) {
+        return await User.findOne({ username: args.username });
       }
     },
 
@@ -518,6 +511,7 @@ const Mutation = new GraphQLObjectType({
         password: { type: GraphQLString }
       },
       async resolve(parent, args, context) {
+        console.log(`in login, args = `, args);
         const { username, password } = args;
         const user = await User.findOne({ username });
         return (await user.comparePassword(password)) ? user : null;
@@ -838,18 +832,18 @@ const Mutation = new GraphQLObjectType({
         username: { type: GraphQLString }
       },
       resolve(parent, args) {
-        console.log(`warrior args: `, args);
+        // console.log(`warrior args: `, args);
         let warrior = new Warrior({ ...args });
         const obj = warrior.save();
 
         return obj.then(warrior => {
-          console.log(`warrior object = `, warrior);
+          // console.log(`warrior object = `, warrior);
           Arena.findById(warrior.ArenaId).then(arena => {
             arena.warriorIds.push(warrior._id);
             arena.save();
           });
           User.findOne({ username: args.username }).then(user => {
-            console.log(`user = `, user);
+            // console.log(`user = `, user);
             user.stableIds.push(warrior._id);
             user.save();
           });
@@ -887,37 +881,28 @@ const Mutation = new GraphQLObjectType({
     deleteWarrior: {
       type: WarriorType,
       args: {
-        id: { type: GraphQLID }
+        id: { type: GraphQLID },
+        username: { type: GraphQLString }
       },
       resolve(parent, args) {
         let returnObj = {};
-        Warrior.findById(args.id, (error, warrior) => {
+        Warrior.findById(args.id, async (error, warrior) => {
           if (error) console.log(error);
+          warrior.show = false;
+          warrior.save();
 
-          if (warrior.battlesIdList.length > 0) {
-            warrior.show = false;
-            warrior.save();
-            Arena.findById(warrior.ArenaId, (error, arena) => {
-              if (error) console.log(error);
+          await Arena.findById(warrior.ArenaId, (error, arena) => {
+            if (error) console.log(error);
 
-              const list = arena.warriorIds.filter(item => {
-                return item != warrior.id;
-              });
-
-              arena.warriorIds = list;
-              arena.save();
-              returnObj = warrior;
+            const list = arena.warriorIds.filter(item => {
+              return item != warrior.id;
             });
-            User.findOne({ username: warrior.username }, (error, user) => {
-              const newStable = user.stableIds.filter(id => {
-                return id !== warrior._id;
-              });
-              user.stableIds = newStable;
-              user.save();
-            });
-          } else {
-            returnObj = Warrior.findByIdAndDelete(args.id);
-          }
+
+            arena.warriorIds = list;
+            arena.save();
+          });
+
+          returnObj = warrior;
         }).then(result => {
           return returnObj;
         });
