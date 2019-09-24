@@ -10,7 +10,8 @@ const db = mongoose.connection;
 const getDbUri = require("./getDbUri");
 
 // Connect to the Mongo DB
-const MONGODB_URI = getDbUri(process.env.NODE_ENV || "development");
+const MONGODB_URI =
+  process.env.MONGODB_URI || getDbUri(process.env.NODE_ENV || "development");
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
