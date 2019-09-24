@@ -37,7 +37,12 @@ const UserType = new GraphQLObjectType({
       type: new GraphQLList(WarriorType),
       resolve(parent, args) {
         if (parent.stableIds) {
-          return parent.stableIds.map(id => Warrior.findById(id));
+          console.log(
+            `in user.stable, parent has some warriors: `,
+            parent.stableIds
+          );
+          const warriors = parent.stableIds.map(id => Warrior.findById(id));
+          return warriors;
         } else return [];
       }
     },
@@ -45,13 +50,18 @@ const UserType = new GraphQLObjectType({
       type: new GraphQLList(WarriorType),
       async resolve(parent, args) {
         if (parent.stableIds) {
-          console.log(`parent has some warriors: `, parent.stableIds);
-          return await parent.stableIds.map(
+          console.log(
+            `in user.activeStable, parent has some warriors: `,
+            parent.stableIds
+          );
+          const warriors = parent.stableIds.map(
             async id =>
               await Warrior.findById(id).then(warrior => {
                 return warrior.alive ? warrior : null;
               })
           );
+          console.log(warriors);
+          return warriors;
         } else return [];
       }
     }
