@@ -908,6 +908,13 @@ const Mutation = new GraphQLObjectType({
               arena.save();
               returnObj = warrior;
             });
+            User.findOne({ username: warrior.username }, (error, user) => {
+              const newStable = user.stableIds.filter(id => {
+                return id !== warrior._id;
+              });
+              user.stableIds = newStable;
+              user.save();
+            });
           } else {
             returnObj = Warrior.findByIdAndDelete(args.id);
           }
