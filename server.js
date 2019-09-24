@@ -9,6 +9,7 @@ const cors = require("cors");
 const db = mongoose.connection;
 const getDbUri = require("./getDbUri");
 
+console.log(`in the server, process.env.NODE_ENV = ${process.env.NODE_ENV}`);
 // Connect to the Mongo DB
 const MONGODB_URI =
   process.env.MONGODB_URI || getDbUri(process.env.NODE_ENV || "development");
@@ -25,13 +26,6 @@ if (process.env.NODE_ENV === "production") {
 
 // Set up connection to GraphQL
 
-app.use(
-  "/",
-  graphqlHTTP({
-    schema: Schema,
-    graphiql: process.env.NODE_ENV === "development"
-  })
-);
 app.use(
   "/graphql",
   graphqlHTTP({
