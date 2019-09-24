@@ -8,6 +8,6 @@ RUN npm i
 
 EXPOSE 3001
 
-ENV NAME production
+ENV NAME development
 
 CMD ["npm", "start"]

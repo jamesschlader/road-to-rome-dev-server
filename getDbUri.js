@@ -12,20 +12,11 @@ const getDbUri = env => {
   console.log(`process.env.TEST_DB_DSN = ${process.env.TEST_DB_DSN}`);
   switch (env) {
     case "development":
-      return (
-        process.env.DEVELOPMENT_DB_DSN ||
-        "mongodb://localhost:27017/road-to-rome-react"
-      );
+      return process.env.DEVELOPMENT_DB_DSN || process.env.MLAB_DB_URI;
     case "production":
-      return (
-        process.env.PRODUCTION_DB_DSN ||
-        "mongodb://localhost:27017/road-to-rome-react"
-      );
+      return process.env.PRODUCTION_DB_DSN || process.env.MLAB_DB_URI;
     case "test":
-      return (
-        process.env.TEST_DB_DSN ||
-        "mongodb://localhost:27017/road-to-rome-react"
-      );
+      return process.env.TEST_DB_DSN || process.env.MLAB_DB_URI;
     default:
       return "";
   }
